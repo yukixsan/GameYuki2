@@ -2,18 +2,19 @@
 #define ENEMY_H
 
 #include "raylib.h"
-
+#include <string>
 class Enemy {
-private:
+public:
     Texture2D texture;
     Vector2 position;
     float speed;
+    Rectangle collider;
 
-public:
-    Enemy(const char* textureFile, float startX, float startY, float moveSpeed);
-    ~Enemy();
+    Enemy(const std::string& texturePath, float startX, float startY, float moveSpeed, float colliderWidth, float colliderHeight);
+    virtual~Enemy();
     void Move();
-    void Draw();
+     void Draw();
+     void UpdateCollider();
     bool IsOffScreen();
     Vector2 GetPosition();
     float GetTextureWidth();  // Return the texture's width

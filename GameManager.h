@@ -4,17 +4,30 @@
 #include "Observer.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Meteor.h"
 #include <vector>
+#include <cstdlib> // for rand() and srand()
+#include <ctime>   // for time()
 
 class GameManager : public Observer {
 private:
     Player* player;
     std::vector<Enemy*>& enemies; // Reference to the enemies in the game
+    std::vector<Meteor*> meteors;
+    float MeteorSpawnTimer = 0.0f;
+    int MeteorSpawnInterval = 3;
 
 public:
-    GameManager(Player* p, std::vector<Enemy*>& e);
+    int score;
+    bool isGamePaused = false;
+    GameManager(Player* p, std::vector<Enemy*>& e,std::vector<Meteor*>& m);
     void Update(); // Game loop update function to check for collisions
-    void OnNotify() override; // Implementing the observer's notification
+    void UpdateMeteor();
+    void OnNotify() override;
+    void Draw();
+    void DisplayScore();
+    void PauseGame();
+
 };
 
 #endif
