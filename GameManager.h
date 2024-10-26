@@ -14,8 +14,6 @@ private:
     Player* player;
     std::vector<Enemy*>& enemies; // Reference to the enemies in the game
     std::vector<Meteor*> meteors;
-    float MeteorSpawnTimer = 0.0f;
-    int MeteorSpawnInterval = 3;
 
 public:
     int score;

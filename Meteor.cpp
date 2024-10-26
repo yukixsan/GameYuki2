@@ -42,9 +42,9 @@ Vector2 Meteor::GetPosition() {
 }
 
 float Meteor::GetTextureWidth() {
-    return (texture.width);
+    return texture.width;
 }
 
 float Meteor::GetTextureHeight() {
-    return (texture.height);
+    return texture.height;
 }
