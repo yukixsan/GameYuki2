@@ -11,7 +11,7 @@ public:
     Rectangle collider;
 
     Enemy(const std::string& texturePath, float startX, float startY, float moveSpeed, float colliderWidth, float colliderHeight);
-    virtual~Enemy();
+    ~Enemy();
     void Move();
      void Draw();
      void UpdateCollider();

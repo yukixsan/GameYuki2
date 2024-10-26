@@ -1,4 +1,5 @@
 #include "Player.h"
+    Vector2 initialPosition = {400, 300};
 
 Player::Player(const char* textureFile, Vector2 startPos, float moveSpeed, float initialscale) {
     texture = LoadTexture(textureFile);
@@ -46,6 +47,10 @@ void Player::Draw() {
     DrawTextureEx(texture, position, 0.0, scale, WHITE);
     DrawRectangleLines(static_cast<int>(collider.x), static_cast<int>(collider.y),
                        static_cast<int>(collider.width), static_cast<int>(collider.height), GREEN);
+}
+void Player::Reset()
+{
+    position = initialPosition;
 }
 Vector2 Player::GetPosition() {
     return position;

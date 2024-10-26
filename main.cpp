@@ -61,6 +61,9 @@ int main() {
 
     // Main game loop
     while (!WindowShouldClose()) {
+        if (IsKeyPressed(KEY_R)) {
+            gameManager.RestartGame(&player, enemies, meteors);
+        }
         //-----SCROLL THE STARS-----//
         for (int i = 0; i < STARS; i++) {
             stars[i].x -= SCROLL_SPEED * (stars[i].z / 1);
@@ -78,7 +81,6 @@ int main() {
          if (enemies.size() < maxEnemies && spawnTimer >= spawnInterval) {
             // Random Y position within screen bounds (subtract 50 to keep it within the screen)
             float randomY = static_cast<float>(rand() % (GetScreenHeight() - 120));
-
             // Spawn a new enemy from the right
             enemies.push_back(new Enemy("Textures/spacecraft.png", GetScreenWidth(), randomY, 15.0f, 400.0f, 100.0f)); 
 
@@ -126,8 +128,18 @@ int main() {
 
         //Check collison
         gameManager.Update();
-        gameManager.UpdateMeteor();
-
+         for (auto it = meteors.begin(); it != meteors.end();) 
+    {       
+        (*it)->UpdateCollider(); // Update each meteor's collider
+        // Check for collision between player and meteor collider
+        if (CheckCollisionRecs(player.GetCollider(), (*it)->MeteorCollider)) {
+            // Player collides with Meteor
+            gameManager.PauseGame();  // Call a function to pause the game
+            break;  // Exit the loop since the player is destroyed
+        } else {
+            ++it;
+        }
+    }
         // Draw everything
         BeginDrawing();
         ClearBackground(BLACK);
@@ -153,8 +165,19 @@ int main() {
     }
     else
     {
-        DrawText("Game Paused", GetScreenWidth() / 2 - MeasureText("Game Paused", 70) / 2, GetScreenHeight() / 2, 20, RED);
+       const char* loseText = "You Lose";
+        int loseFontSize = 90;
+        int loseTextWidth = MeasureText(loseText, loseFontSize);
 
+        // Center the "You Lose" text
+        DrawText(loseText, (GetScreenWidth() - loseTextWidth) / 2, GetScreenHeight() / 2 - loseFontSize, loseFontSize, RED);
+
+        const char* restartText = "Press R to restart";
+        int restartFontSize = 40;
+        int restartTextWidth = MeasureText(restartText, restartFontSize);
+
+        // Center the "Press R to restart" text below "You Lose"
+        DrawText(restartText, (GetScreenWidth() - restartTextWidth) / 2, GetScreenHeight() / 2 + loseFontSize / 2, restartFontSize, WHITE);
     }
         EndDrawing();
     }

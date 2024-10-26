@@ -17,6 +17,7 @@ public:
     void Move();
     void Draw();
     void UpdateCollider();
+    void Reset();
     Rectangle GetCollider();
     Vector2 GetPosition(); // Return the player's position
     float GetTextureWidth();  // Return the texture's width

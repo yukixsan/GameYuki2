@@ -1,4 +1,3 @@
-// Obstacle.cpp
 #include "Meteor.h"
 
 Meteor::Meteor(const std::string& textureFile, float startX, float startY, float moveSpeed, float colliderWidth, float colliderHeight) 

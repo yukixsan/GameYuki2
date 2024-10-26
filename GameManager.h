@@ -25,6 +25,7 @@ public:
     void Draw();
     void DisplayScore();
     void PauseGame();
+    void RestartGame(Player* player, std::vector<Enemy*>& enemies, std::vector<Meteor*>& meteors);
 
 };
 
