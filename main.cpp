@@ -74,7 +74,6 @@ int main() {
             }
         }
         
-        player.Move();
         spawnTimer += GetFrameTime();
         meteorSpawnTimer += GetFrameTime();
         // Spawn new enemies if we have less than the max allowed
@@ -113,19 +112,6 @@ int main() {
             meteorSpawnTimer = 0.0f;
             meteorSpawnInterval = rand() % 3 + 3;
         }
-
-        // Update enemy movement and remove if off-screen
-        for (int i = meteors.size() - 1; i >= 0; --i) {
-            meteors[i]->Move();
-            meteors[i]->UpdateCollider();
-
-            // Remove and delete enemy if it goes off-screen
-            if (meteors[i]->IsOffScreen()) {
-                delete meteors[i];
-                meteors.erase(meteors.begin() + i);
-            }
-        }
-
         //Check collison
         gameManager.Update();
          for (auto it = meteors.begin(); it != meteors.end();) 
@@ -140,6 +126,20 @@ int main() {
             ++it;
         }
     }
+       // Update enemy movement and remove if off-screen
+        for (int i = meteors.size() - 1; i >= 0; --i) {
+            meteors[i]->Move();
+            meteors[i]->UpdateCollider();
+
+            // Remove and delete enemy if it goes off-screen
+            if (meteors[i]->IsOffScreen()) {
+                delete meteors[i];
+                meteors.erase(meteors.begin() + i);
+            }
+        }
+
+        player.Move();
+
         // Draw everything
         BeginDrawing();
         ClearBackground(BLACK);
@@ -162,6 +162,7 @@ int main() {
         for (Meteor* meteors : meteors) {
             meteors->Draw();
         }
+        
     }
     else
     {

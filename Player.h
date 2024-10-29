@@ -9,6 +9,7 @@ private:
     Vector2 position;
     float speed;
     float scale;
+    float rotation;
     Rectangle collider;
 
 public:

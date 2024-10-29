@@ -2,13 +2,15 @@
 
 GameManager::GameManager(Player* p, std::vector<Enemy*>& e, std::vector<Meteor*>& m) : player(p), enemies(e),meteors(m), score(0) {}
 
+ParticleSystem* explosion = nullptr;
 void GameManager::Update() {
     // Loop through all enemies and check for collisions
     for (auto it = enemies.begin(); it != enemies.end();) {
         (*it)->UpdateCollider(); 
         // Check for collision between player and enemy collider
         if (CheckCollisionRecs(player->GetCollider(), (*it)->collider)) {
-            // Collision with Enemy: Destroy the enemy and increase score
+            // Collision with Enemy: Destroy the enemy and increase 
+            explosion = new ParticleSystem((*it)->GetPosition(),50,100);
             delete *it;
             it = enemies.erase(it);
             score++;

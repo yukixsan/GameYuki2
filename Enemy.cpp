@@ -15,7 +15,6 @@ Enemy::~Enemy() {
 
 void Enemy::Move() {
     position.x -= speed;
-
     UpdateCollider();
 }
 

@@ -7,10 +7,7 @@ Player::Player(const char* textureFile, Vector2 startPos, float moveSpeed, float
     speed = moveSpeed;
     scale = initialscale;
 
-    collider.width = 220.0f;  // Adjust this value as needed
-    collider.height = 160.0f; // Adjust this value as needed
-    collider.x = position.x + (texture.width / 2.0f) - (collider.width / 2.0f);
-    collider.y = position.y+ (texture.height / 2.0f) - (collider.height / 2.0f);
+
 }
 
 Player::~Player() {
@@ -33,7 +30,11 @@ void Player::Move() {
     if (IsKeyDown(KEY_D) && position.x < GetScreenWidth() - playerWidth) {
         position.x += speed;
     }
-        UpdateCollider();
+
+    rotation += 0.5f; // Adjust speed of rotation as needed
+    if (rotation >= 360.0f) rotation = 0.0f; // Reset after full rotation
+    
+    UpdateCollider();
 
 }
 
@@ -44,7 +45,23 @@ void Player::UpdateCollider()
 }
 
 void Player::Draw() {
-    DrawTextureEx(texture, position, 0.0, scale, WHITE);
+   // DrawTextureEx(texture, position, rotation, scale, WHITE);
+   
+    Rectangle sourceRect = { 0.0f, 0.0f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
+    Rectangle destRect = { position.x, position.y, texture.width * scale, texture.height * scale };
+
+    // Calculate the center of the scaled texture
+    Vector2 origin = { (texture.width * scale) / 2.0f, (texture.height * scale) / 2.0f };
+
+    // Now, draw with rotation and scaling around the center
+    DrawTexturePro(texture, sourceRect, destRect, origin, rotation, WHITE);
+
+    //Collider
+    collider.x = position.x - (collider.width / 2.0f);
+    collider.y = position.y - (collider.height / 2.0f);
+    float scaledWidth = texture.width * scale;
+    float scaledHeight = texture.height * scale;
+    collider.width = scaledWidth; collider.height = scaledHeight;
     DrawRectangleLines(static_cast<int>(collider.x), static_cast<int>(collider.y),
                        static_cast<int>(collider.width), static_cast<int>(collider.height), GREEN);
 }

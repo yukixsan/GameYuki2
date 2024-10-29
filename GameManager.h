@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Meteor.h"
+#include "ParticleSystem.h"
 #include <vector>
 #include <cstdlib> // for rand() and srand()
 #include <ctime>   // for time()
