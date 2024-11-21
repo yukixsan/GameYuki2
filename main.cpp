@@ -50,6 +50,7 @@ int main() {
 
      // Spawning variables
     float spawnTimer = 0.0f; // Timer to track the time since last spawn
+    float deltaTime;
     int spawnInterval = 1;    // Randomized spawn interval (in seconds)
     const int maxEnemies = 1; // Only 1 enemy on screen at a time
     const int maxMeteors = 2;
@@ -76,10 +77,12 @@ int main() {
         
         spawnTimer += GetFrameTime();
         meteorSpawnTimer += GetFrameTime();
+        deltaTime += GetFrameTime();
+    
         // Spawn new enemies if we have less than the max allowed
          if (enemies.size() < maxEnemies && spawnTimer >= spawnInterval) {
             // Random Y position within screen bounds (subtract 50 to keep it within the screen)
-            float randomY = static_cast<float>(rand() % (GetScreenHeight() - 120));
+            float randomY = static_cast<float>(rand() % (GetScreenHeight() - 200));
             // Spawn a new enemy from the right
             enemies.push_back(new Enemy("Textures/spacecraft.png", GetScreenWidth(), randomY, 15.0f, 400.0f, 100.0f)); 
 
@@ -113,7 +116,7 @@ int main() {
             meteorSpawnInterval = rand() % 3 + 3;
         }
         //Check collison
-        gameManager.Update();
+        gameManager.Update(deltaTime);
          for (auto it = meteors.begin(); it != meteors.end();) 
     {       
         (*it)->UpdateCollider(); // Update each meteor's collider
@@ -163,6 +166,8 @@ int main() {
             meteors->Draw();
         }
         
+        gameManager.Draw();
+        
     }
     else
     {
@@ -179,6 +184,14 @@ int main() {
 
         // Center the "Press R to restart" text below "You Lose"
         DrawText(restartText, (GetScreenWidth() - restartTextWidth) / 2, GetScreenHeight() / 2 + loseFontSize / 2, restartFontSize, WHITE);
+        char scoreText[50];  // Buffer for the score text
+sprintf(scoreText, "Score: %d", gameManager.score);  // Format the score text
+int scoreFontSize = 40; 
+int scoreTextWidth = MeasureText(scoreText, scoreFontSize);
+        gameManager.PauseGame();
+
+// Center the score text below the restart prompt
+DrawText(scoreText, (GetScreenWidth() - scoreTextWidth) / 2, GetScreenHeight() / 2 + loseFontSize / 2 + restartFontSize, scoreFontSize, YELLOW);
     }
         EndDrawing();
     }

@@ -15,18 +15,23 @@ private:
     Player* player;
     std::vector<Enemy*>& enemies; // Reference to the enemies in the game
     std::vector<Meteor*> meteors;
+    std::vector<ParticleSystem> explosions;
+
 
 public:
     int score;
     bool isGamePaused = false;
     GameManager(Player* p, std::vector<Enemy*>& e,std::vector<Meteor*>& m);
-    void Update(); // Game loop update function to check for collisions
+    void Update(float deltaTime); // Game loop update function to check for collisions
     void UpdateMeteor();
     void OnNotify() override;
     void Draw();
     void DisplayScore();
     void PauseGame();
     void RestartGame(Player* player, std::vector<Enemy*>& enemies, std::vector<Meteor*>& meteors);
+    void TriggerExplosion(Vector2 postion);
+    void UpdateExplosion();
+    void DrawExplosion();
 
 };
 

@@ -2,19 +2,29 @@
 
 GameManager::GameManager(Player* p, std::vector<Enemy*>& e, std::vector<Meteor*>& m) : player(p), enemies(e),meteors(m), score(0) {}
 
-ParticleSystem* explosion = nullptr;
-void GameManager::Update() {
+
+void GameManager::Update(float deltaTime) {
     // Loop through all enemies and check for collisions
     for (auto it = enemies.begin(); it != enemies.end();) {
         (*it)->UpdateCollider(); 
         // Check for collision between player and enemy collider
         if (CheckCollisionRecs(player->GetCollider(), (*it)->collider)) {
-            // Collision with Enemy: Destroy the enemy and increase 
-            explosion = new ParticleSystem((*it)->GetPosition(),50,100);
+explosions.emplace_back((*it)->GetPosition(),30,100);  // Update position if needed
+        explosions[0].Emit();  // Emit particles            
+        // Collision with Enemy: Destroy the enemy and increase 
             delete *it;
             it = enemies.erase(it);
             score++;
             continue;  // Continue to the next iteration since an enemy was erased
+        } else {
+            ++it;
+        }
+    }
+    //Explosion
+       for (auto it = explosions.begin(); it != explosions.end();) {
+        it->Update(deltaTime);  // Update each particle system
+        if (!it->IsActive()) {  // If the explosion is finished, remove it
+            it = explosions.erase(it);
         } else {
             ++it;
         }
@@ -63,10 +73,19 @@ void GameManager::RestartGame(Player* player, std::vector<Enemy*>& enemies, std:
     enemies.clear();
     for (Meteor* meteor : meteors) delete meteor;
     meteors.clear();
+    explosions.clear();
 
     // Reset player properties, if necessary
     player->Reset();
 }
+
+void GameManager::Draw()
+{
+     for ( auto& explosion : explosions) {
+        explosion.Draw();  // Draw each active explosion
+    }
+}
+
 void GameManager::OnNotify()
 {
 
